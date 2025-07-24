@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: siroko_php
+    command: symfony local:server:start --port=8000 --allow-all-ip --allow-http --no-tls
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - DATABASE_URL=postgresql://siroko:siroko123@postgres:5432/siroko_db
+      - REDIS_URL=redis://redis:6379
+    ports:
+      - "8000:8000"
+    networks:
+      - siroko_network
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: siroko_postgres
+    environment:
+      POSTGRES_DB: siroko_db
+      POSTGRES_USER: siroko
+      POSTGRES_PASSWORD: siroko123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - siroko_network
+
+  redis:
+    image: redis:7-alpine
+    container_name: siroko_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - siroko_network
+
+volumes:
+  postgres_data:
+
+networks:
+  siroko_network:
+    driver: bridge
