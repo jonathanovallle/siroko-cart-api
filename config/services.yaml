@@ -3,36 +3,61 @@ services:
         autowire: true
         autoconfigure: true
 
+    # Cargar todas las clases automáticamente
     App\:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
-            - '../src/Entity/'
             - '../src/Kernel.php'
 
+    # === REPOSITORIOS CON DBAL ===
+    
+    # Cart Context
     App\Cart\Domain\Repository\CartRepositoryInterface:
         class: App\Cart\Infrastructure\Repository\DoctrineCartRepository
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
 
     App\Cart\Domain\Repository\ProductRepositoryInterface:
         class: App\Cart\Infrastructure\Repository\DoctrineProductRepository
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
 
+    # Checkout Context  
     App\Checkout\Domain\Repository\OrderRepositoryInterface:
         class: App\Checkout\Infrastructure\Repository\DoctrineOrderRepository
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
 
+    # === SERVICIOS DE DOMINIO ===
+    
     App\Checkout\Domain\Service\PaymentServiceInterface:
         class: App\Checkout\Infrastructure\Service\StripePaymentService
         arguments:
-            $stripeSecretKey: '%env(STRIPE_SECRET_KEY)%'
+            $stripeSecretKey: 'sk_test_fake_key'
 
+    # === HANDLERS EXPLÍCITOS ===
+    
+    # Cart Handlers
     App\Cart\Application\Command\CreateCart\CreateCartHandler:
         arguments:
             $cartRepository: '@App\Cart\Domain\Repository\CartRepositoryInterface'
 
-    App\Cart\Application\Command\AddItemToCart\AddItemToCartHandler:
-        arguments:
-            $cartRepository: '@App\Cart\Domain\Repository\CartRepositoryInterface'
-            $productRepository: '@App\Cart\Domain\Repository\ProductRepositoryInterface'
-
     App\Cart\Application\Query\GetCart\GetCartHandler:
         arguments:
             $cartRepository: '@App\Cart\Domain\Repository\CartRepositoryInterface'
+
+    App\Cart\Application\Query\GetProducts\GetProductsHandler:
+        arguments:
+            $productRepository: '@App\Cart\Domain\Repository\ProductRepositoryInterface'
+
+    # Checkout Handlers
+    App\Checkout\Application\Command\ProcessCheckout\ProcessCheckoutHandler:
+        arguments:
+            $cartRepository: '@App\Cart\Domain\Repository\CartRepositoryInterface'
+            $orderRepository: '@App\Checkout\Domain\Repository\OrderRepositoryInterface'
+            $paymentService: '@App\Checkout\Domain\Service\PaymentServiceInterface'
+
+    App\Checkout\Application\Query\GetOrder\GetOrderHandler:
+        arguments:
+            $orderRepository: '@App\Checkout\Domain\Repository\OrderRepositoryInterface'

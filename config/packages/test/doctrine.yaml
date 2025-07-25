@@ -1,0 +1,5 @@
+doctrine:
+    dbal:
+        url: 'postgresql://siroko:siroko123@postgres:5432/siroko_test_db'
+        charset: utf8
+        server_version: '15'
