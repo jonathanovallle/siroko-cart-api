@@ -18,3 +18,9 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Cart/Infrastructure/Persistence/Doctrine'
                 prefix: 'App\Cart\Domain\Entity'
                 alias: Cart
+            Checkout:
+                is_bundle: false
+                type: xml
+                dir: '%kernel.project_dir%/src/Checkout/Infrastructure/Persistence/Doctrine'
+                prefix: 'App\Checkout\Domain\Entity'
+                alias: Checkout

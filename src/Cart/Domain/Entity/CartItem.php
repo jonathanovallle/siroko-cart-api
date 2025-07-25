@@ -8,6 +8,8 @@ use App\Cart\Domain\ValueObject\Money;
 
 class CartItem
 {
+    private ?Cart $cart = null;
+
     public function __construct(
         private ProductId $productId,
         private string $productName,
@@ -48,5 +50,15 @@ class CartItem
     public function increaseQuantity(Quantity $quantity): void
     {
         $this->quantity = $this->quantity->add($quantity);
+    }
+
+    public function getCart(): ?Cart
+    {
+        return $this->cart;
+    }
+
+    public function setCart(Cart $cart): void
+    {
+        $this->cart = $cart;
     }
 }
