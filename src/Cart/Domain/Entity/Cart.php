@@ -10,6 +10,7 @@ use App\Cart\Domain\Event\CartCreated;
 use App\Cart\Domain\Event\ItemAddedToCart;
 use App\Cart\Domain\Event\ItemRemovedFromCart;
 use App\Cart\Domain\Event\ItemUpdatedInCart;
+use App\Cart\Domain\Event\CartCleared;
 use DomainException;
 
 class Cart
@@ -64,6 +65,7 @@ class Cart
                 $product->getPrice(),
                 $quantity
             );
+            $cartItem->setCart($this); // Establecer la relación bidireccional
             $this->items[$productId->toString()] = $cartItem;
             $this->recordEvent(new ItemAddedToCart($this->id, $productId, $quantity));
         }

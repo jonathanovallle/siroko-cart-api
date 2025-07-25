@@ -1,3 +1,7 @@
 api_cart:
     resource: '../src/Cart/Infrastructure/Controller/'
     type: annotation
+    
+api_checkout:
+    resource: '../src/Checkout/Infrastructure/Controller/'
+    type: annotation
