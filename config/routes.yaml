@@ -1,0 +1,3 @@
+api_cart:
+    resource: '../src/Cart/Infrastructure/Controller/'
+    type: annotation
