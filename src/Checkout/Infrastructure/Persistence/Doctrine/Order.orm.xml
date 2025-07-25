@@ -1,0 +1,23 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Checkout\Domain\Entity\Order" table="orders">
+        <id name="id" type="order_id" column="id"/>
+        
+        <field name="cartId" type="cart_id" column="cart_id"/>
+        <field name="status" type="string" column="status"/>
+        <field name="totalAmount" type="money" column="total_amount"/>
+        <field name="createdAt" type="datetime" column="created_at"/>
+        
+        <embedded name="customerInfo" class="App\Checkout\Domain\ValueObject\CustomerInfo" column-prefix="customer_"/>
+        
+        <one-to-many field="items" target-entity="App\Checkout\Domain\Entity\OrderItem" 
+                     mapped-by="order" fetch="EAGER">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </one-to-many>
+    </entity>
+</doctrine-mapping>

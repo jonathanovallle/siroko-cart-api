@@ -1,0 +1,15 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <embeddable name="App\Checkout\Domain\ValueObject\CustomerInfo">
+        <field name="email" type="string" column="email"/>
+        <field name="firstName" type="string" column="first_name"/>
+        <field name="lastName" type="string" column="last_name"/>
+        <field name="address" type="string" column="address"/>
+        <field name="city" type="string" column="city"/>
+        <field name="postalCode" type="string" column="postal_code"/>
+        <field name="country" type="string" column="country"/>
+    </embeddable>
+</doctrine-mapping>
