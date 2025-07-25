@@ -273,15 +273,35 @@ Response 200:
 
 ### **Arquitectura Hexagonal**
 ```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Controllers   │────│   Application   │────│     Domain      │
-│   (Adapters)    │    │   (Use Cases)   │    │   (Pure Logic)  │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-         │                       │                       │
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Repositories  │    │   Event Bus     │    │   Value Objects │
-│   (Ports)       │    │   (CQRS)        │    │   (Immutable)   │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│                    INFRASTRUCTURE LAYER                        │
+├─────────────────┬─────────────────┬─────────────────────────────┤
+│   Controllers   │   Repositories  │   External Services         │
+│   (HTTP Input)  │   (Database)    │   (Payment, Email, etc.)    │
+│   - CartCtrl    │   - DoctrineRepo│   - StripePayment           │
+│   - CheckoutCtrl│   - RedisCache  │   - EmailService            │
+└─────────────────┼─────────────────┼─────────────────────────────┘
+         │                 │                     │
+         ▼                 ▼                     ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    APPLICATION LAYER                           │
+├─────────────────┬─────────────────┬─────────────────────────────┤
+│   Commands      │   Queries       │   Ports (Interfaces)       │
+│   (Write)       │   (Read)        │   - CartRepositoryInterface │
+│   - AddItemCmd  │   - GetCartQry  │   - PaymentServiceInterface │
+│   - CheckoutCmd │   - GetOrderQry │   - EventBusInterface       │
+└─────────────────┼─────────────────┼─────────────────────────────┘
+         │                 │                     │
+         ▼                 ▼                     ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                      DOMAIN LAYER                              │
+├─────────────────┬─────────────────┬─────────────────────────────┤
+│   Entities      │   Value Objects │   Domain Events             │
+│   (Aggregates)  │   (Immutable)   │   (Business Events)         │
+│   - Cart        │   - Money       │   - CartCreated             │
+│   - Order       │   - CartId      │   - ItemAdded               │
+│   - Product     │   - Quantity    │   - OrderPlaced             │
+└─────────────────┴─────────────────┴─────────────────────────────┘
 ```
 
 ### **CQRS Implementation**
