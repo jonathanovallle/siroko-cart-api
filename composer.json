@@ -1,6 +1,6 @@
 {
     "name": "siroko/cart-checkout-api",
-    "description": "Siroko Cart & Checkout API with Hexagonal Architecture, DDD and CQRS",
+    "description": "Siroko Cart",
     "type": "project",
     "license": "MIT",
     "minimum-stability": "stable",

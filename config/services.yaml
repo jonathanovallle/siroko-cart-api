@@ -1,0 +1,30 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+            
+    App\Cart\Domain\Repository\CartRepositoryInterface:
+        class: App\Cart\Infrastructure\Repository\DoctrineCartRepository
+
+    App\Cart\Domain\Repository\ProductRepositoryInterface:
+        class: App\Cart\Infrastructure\Repository\DoctrineProductRepository
+
+    App\Cart\Application\Command\CreateCart\CreateCartHandler:
+        arguments:
+            $cartRepository: '@App\Cart\Domain\Repository\CartRepositoryInterface'
+
+    App\Cart\Application\Command\AddItemToCart\AddItemToCartHandler:
+        arguments:
+            $cartRepository: '@App\Cart\Domain\Repository\CartRepositoryInterface'
+            $productRepository: '@App\Cart\Domain\Repository\ProductRepositoryInterface'
+           
+    App\Cart\Application\Query\GetCart\GetCartHandler:
+        arguments:
+            $cartRepository: '@App\Cart\Domain\Repository\CartRepositoryInterface'
