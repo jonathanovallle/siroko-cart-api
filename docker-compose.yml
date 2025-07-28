@@ -14,7 +14,7 @@ services:
       - DATABASE_URL=postgresql://siroko:siroko123@postgres:5432/siroko_db
       - REDIS_URL=redis://redis:6379
     ports:
-      - "8000:8000"
+      - "8080:8000"
     networks:
       - siroko_network
 
